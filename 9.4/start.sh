@@ -2,7 +2,10 @@
 
 set -e
 
-# Stop existing postgres
+# Stop postgres when exiting
+trap "service postgresql stop; exit" SIGHUP SIGINT SIGTERM
+
+# Start postgres
 service postgresql restart
 
 # UTF8
@@ -13,7 +16,7 @@ su postgres -c "psql -c \"UPDATE pg_database SET datistemplate = TRUE WHERE datn
 su postgres -c "psql -d template1 -c \"VACUUM FREEZE;\""
 
 # Create user and database
-su postgres -c "psql -c \"CREATE USER docker WITH SUPERUSER PASSWORD 'docker';\""
-su postgres -c "createdb --encoding=UTF8 --owner=docker docker"
+su postgres -c "psql -c \"CREATE USER docker WITH SUPERUSER PASSWORD 'docker';\"" || true;
+su postgres -c "createdb --encoding=UTF8 --owner=docker docker" || true;
 
 while true; do sleep 1; done
