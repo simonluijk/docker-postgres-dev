@@ -2,6 +2,15 @@
 
 set -e
 
+# if data file exists then no volumes have been mounted, otherwise start fresh
+#service postgresql stop
+
+if [ ! -f /var/lib/postgresql/$PG_VERSION/main/PG_VERSION ]; then
+    su postgres -c "/usr/lib/postgresql/9.4/bin/initdb --pgdata ${PGDATA} -A peer";
+    chown -Rf postgres:postgres ${PGDATA}
+    chmod 700 ${PGDATA}
+fi
+
 # Stop postgres when exiting
 trap "service postgresql stop; exit" SIGHUP SIGINT SIGTERM
 
