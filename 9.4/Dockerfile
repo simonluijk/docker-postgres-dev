@@ -15,8 +15,8 @@ RUN apt-get install -y postgresql postgresql-client \
     apt-get clean && rm -rf /var/cache/apt/*
 
 ENV PGCONF /etc/postgresql/$PG_VERSION/main
-ENV PGDATA /usr/lib/postgresql/$PG_VERSION
-ENV PATH $PGDATA/bin:$PATH
+ENV PGDATA /var/lib/postgresql/$PG_VERSION/main
+ENV PATH /usr/lib/postgresql/$PG_VERSION/bin:$PATH
 
 RUN sed -ri "s/^#(listen_addresses\s*=\s*)\S+/\1'*'/" "$PGCONF"/postgresql.conf
 RUN { echo; echo "host all all 0.0.0.0/0 trust"; } >> "$PGCONF"/pg_hba.conf

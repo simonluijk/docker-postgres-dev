@@ -1,0 +1,12 @@
+version: "2"
+services:
+
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: simonluijk/docker-postgres-dev:9.4
+    volumes:
+      - ./tmp/postgres:/var/lib/postgresql/9.4
+    ports:
+      - 5432:5432
