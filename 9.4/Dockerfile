@@ -16,13 +16,11 @@ RUN apt-get install -y postgresql postgresql-client \
 
 ENV PGCONF /etc/postgresql/$PG_VERSION/main
 ENV PGDATA /var/lib/postgresql/$PG_VERSION/main
-ENV PATH /usr/lib/postgresql/$PG_VERSION/bin:$PATH
+ENV PGBIN /usr/lib/postgresql/$PG_VERSION/bin
+ENV PATH $PGBIN:$PATH
 
 RUN sed -ri "s/^#(listen_addresses\s*=\s*)\S+/\1'*'/" "$PGCONF"/postgresql.conf
 RUN { echo; echo "host all all 0.0.0.0/0 trust"; } >> "$PGCONF"/pg_hba.conf
-
-RUN mkdir -p /var/run/postgresql/$PG_VERSION-main.pg_stat_tmp && \
-    chown postgres.postgres /var/run/postgresql/$PG_VERSION-main.pg_stat_tmp
 
 VOLUME  ["/var/log/postgresql", "/var/lib/postgresql"]
 
