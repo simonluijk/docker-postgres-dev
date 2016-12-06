@@ -16,6 +16,7 @@ trap "service postgresql stop; exit" SIGHUP SIGINT SIGTERM
 # Start postgres
 echo "Restarting postgres..."
 service postgresql restart
+sleep 5
 
 # UTF8
 echo "Setting up encoding..."
