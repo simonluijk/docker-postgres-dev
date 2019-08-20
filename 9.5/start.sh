@@ -15,7 +15,8 @@ fi
 trap "service postgresql stop; exit" SIGHUP SIGINT SIGTERM
 
 # Start postgres
-service postgresql restart
+echo "Start Postgres and wait for start to finish ..."
+su postgres -c "${PGBIN}/pg_ctl start -w"
 
 # UTF8
 su postgres -c "psql -c \"UPDATE pg_database SET datistemplate = FALSE WHERE datname = 'template1';\"";
